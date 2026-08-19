@@ -1491,11 +1491,21 @@ async function createRoom() {
 async function uniqueRoomCode() {
     let code = "";
     let exists = true;
+
     while (exists) {
         code = String(Math.floor(100000 + Math.random() * 900000));
-        const { data } = await sbSelect("rooms", q => q.eq("code", code).limit(1));
+
+        const result = await sbSelect(
+            "rooms",
+            q => q.eq("code", code).limit(1)
+        );
+
+        // Prevent "Cannot read properties of undefined (reading 'length')"
+        const data = Array.isArray(result?.data) ? result.data : [];
+
         exists = data.length > 0;
     }
+
     return code;
 }
 
