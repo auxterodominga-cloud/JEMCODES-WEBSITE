@@ -1107,11 +1107,12 @@ async function loadCurrentProfile(userId) {
 }
 
 /* ---------------- APP SHELL ---------------- */
-function renderApp() {
-    if (!currentUser) {
-        renderAuth();
-        return;
-    }
+function isManager() {
+    return currentUser &&
+        (currentUser.role === "teacher" || currentUser.role === "boss");
+}
+
+    function renderApp() { 
 
     const unread = 0; // refreshed in the page renderer when needed
 
